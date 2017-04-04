@@ -1,4 +1,4 @@
-## How predction works
+## How prediction works
 
 Based on previous monthly prices, to predict a future price several months from now, we have two options, as illustrated below.
 For this study, the prediciton is based on Option 1.
