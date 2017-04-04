@@ -1,24 +1,11 @@
-from os.path import join, dirname
 import pandas as pd
 import numpy as np
-from bokeh.plotting import figure, show, output_file, save
-from bokeh.layouts import row, column
-from bokeh.sampledata.us_states import data as states
-from bokeh.palettes import Viridis256
-from bokeh.models import HoverTool, ColumnDataSource, ColorBar, LinearColorMapper, NumeralTickFormatter, Select
-from bokeh.io import curdoc
+from os.path import join, dirname
 from collections import defaultdict
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
-
-
-def get_dataset(src, countystate):
-    df = src[['dates',countystate]]
-    df.columns=['dates','price']
-    return ColumnDataSource(df)
-
-
+#Function To Read Data
 def read_zillow_csv(filename, skip=7):
     df=pd.read_csv(filename)
     dfcopy = df.copy()
@@ -33,6 +20,7 @@ def read_zillow_csv(filename, skip=7):
         county_choices[dfcopy.loc[ind]['State']].append(dfcopy.loc[ind]['RegionName'])
     return (df, county_choices, countystate_choices)
 
+#Function to Preprocess Data for Analysis
 def organize_data(data, past, future):
 
     future = future  
@@ -51,17 +39,12 @@ def organize_data(data, past, future):
     return X,X2, y
 
 def error_analysis(ypred, ytrue):
-    idx = ytrue != 0.0
     return np.mean(np.abs(ypred-ytrue)/ytrue)
 
 
-#Default Choices
-county='LOS ANGELES'
-state='CA'
-mode='Historical Data'
-countystate = county+state
+file_name= 'data/County_Zhvi_AllHomes.csv'
+file_name=(join(dirname(__file__), file_name))
 
-file_name= 'C:/Users/Yile/Documents/Zillow_Project/data/County_Zhvi_AllHomes.csv'
 
 zillow_df, county_choices, countystate_choices = read_zillow_csv(file_name, 7)
 zillow_df = zillow_df.reindex(zillow_df['dates'])
@@ -71,8 +54,6 @@ h = 12 #To predict how many months from now
 m = 200 # size of traning sets
 error_dict = {} #For Error Analysis
 price_dict ={}
-#price_db = pd.DataFrame({ 'dates': pd.date_range(start=pd.datetime(1996, 4, 1), end=pd.datetime(2018, 2, 1), freq='MS')})
-#price_db = price_db.set_index(price_db['dates'])
 
 
 for countystate in countystate_choices: #countystate_choices:
@@ -92,9 +73,11 @@ price_db = pd.DataFrame(price_dict)
 price_db['dates'] = pd.date_range(start=pd.datetime(1998, 4, 1), end=pd.datetime(2018, 2, 1), freq='MS')
 error_db = pd.DataFrame.from_dict(error_dict, orient='index')
 error_db = error_db.transpose()
-file_name_error= 'C:/Users/Yile/Documents/Zillow_Project/data/predict_error_new.csv'
+file_name_error= 'data/predict_error_new.csv'
+file_name_error=(join(dirname(__file__), file_name_error))
 error_db.to_csv(file_name_error)
-file_name_price_withpredictions= 'C:/Users/Yile/Documents/Zillow_Project/data/Price_WithPredictions_new.csv'
+file_name_price_withpredictions= 'data/Price_WithPredictions_new.csv'
+file_name_price_withpredictions=(join(dirname(__file__), file_name_price_withpredictions))
 price_db.to_csv(file_name_price_withpredictions)
 
 
