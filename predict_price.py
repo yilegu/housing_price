@@ -51,9 +51,8 @@ zillow_df = zillow_df.reindex(zillow_df['dates'])
 
 k = 12 #Number of previous months to look at
 h = 12 #To predict how many months from now
-m = 200 # size of traning sets
-error_dict = {} #For Error Analysis
-price_dict ={}
+price_dict ={} #Store predictions
+error_dict = {} #Store errors of predictions
 
 
 for countystate in countystate_choices: #countystate_choices:
