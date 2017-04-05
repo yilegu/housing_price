@@ -4,7 +4,7 @@ yile.world
 ## How prediction works
 
 Based on previous monthly prices, to predict a future price several months from now, we have two options, as illustrated below.
-For this study, the prediciton is based on Option 1.
+For this study, the prediciton is based on Option 2. In future studies, we will use cross-validations to compare the two.
 
 ### Option 1
 _Advantages_: Can be more accurate if the most recent prices are better indicators.
